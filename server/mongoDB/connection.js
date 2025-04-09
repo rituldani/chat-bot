@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
+
 const mongoDBConnect = () => {
   try {
-    mongoose.connect(process.env.URL, {
+    mongoose.connect(process.env.MONGODB_URI, {
       useUnifiedTopology: true,
       useNewUrlParser: true,
     });
@@ -10,4 +11,5 @@ const mongoDBConnect = () => {
     console.log("Error - MongoDB Connection " + error);
   }
 };
+
 export default mongoDBConnect;
