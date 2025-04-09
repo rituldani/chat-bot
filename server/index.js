@@ -16,24 +16,26 @@ const corsConfig = {
   credentials: true,
 };
 const PORT=process.env.PORT || 8000
-app.listen(PORT, () => {
-  console.log(`Server Listening at PORT - ${PORT}`);
-});
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors(corsConfig));
+app.get("/", (req, res) => {
+  res.send("Backend is running ✅");
+});
 app.use('/', userRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/message', messageRoutes);
+
 mongoose.set('strictQuery', false);
 mongoDBConnect();
-const server = app.listen(PORT, () => {
-  console.log(`Server Listening at PORT - ${PORT}`);
-});
+
+
+const server = http.createServer(app);
 const io = new Server.Server(server, {
   pingTimeout: 60000,
   cors: {
-    origin: 'http://localhost:3000',
+    origin: process.env.BASE_URL || "http://localhost:3000",
   },
 });
 io.on('connection', (socket) => {
@@ -61,4 +63,7 @@ io.on('connection', (socket) => {
     });
   });
   
+});
+server.listen(PORT, () => {
+  console.log(`✅ Server Listening at PORT - ${PORT}`);
 });
