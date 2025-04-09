@@ -9,6 +9,7 @@ import chatRoutes from './routes/chat.js';
 import messageRoutes from './routes/message.js';
 import * as Server from 'socket.io';
 import dotenv from 'dotenv';
+import http from 'http';
 dotenv.config();
 const app = express();
 const corsConfig = {
