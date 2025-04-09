@@ -16,7 +16,9 @@ const corsConfig = {
   credentials: true,
 };
 const PORT=process.env.PORT || 8000
-
+app.listen(PORT, () => {
+  console.log(`Server Listening at PORT - ${PORT}`);
+});
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors(corsConfig));
