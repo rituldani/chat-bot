@@ -12,15 +12,27 @@ import dotenv from 'dotenv';
 import http from 'http';
 dotenv.config();
 const app = express();
-const corsConfig = {
-  origin: process.env.BASE_URL,
-  credentials: true,
-};
+// const corsConfig = {
+//   origin: process.env.BASE_URL || 'https://real-time-chat-app-1-hw9s.onrender.com',
+//   credentials: true,
+// };
 const PORT=process.env.PORT || 8000
-
+const allowedOrigins = ["https://real-time-chat-app-1-hw9s.onrender.com"];
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true, // if you're using cookies or sessions
+  })
+);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cors(corsConfig));
+// app.use(cors(corsConfig));
 app.get("/", (req, res) => {
   res.send("Backend is running ✅");
 });
