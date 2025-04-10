@@ -26,10 +26,11 @@ export const registerUser = async (body) => {
   try {
     return await axios.post(`${url}/auth/register`, body);
   } catch (error) {
-    console.log('Error in register API:', error.response?.data || error.message);
-    throw error;
+    console.log('Error in register API:', error?.response?.data);
+    throw error; // ✨ re-throw the error so it's caught in the form
   }
 };
+
 export const validUser = async () => {
   try {
     const token = localStorage.getItem('userToken');
