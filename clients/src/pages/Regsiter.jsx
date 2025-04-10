@@ -23,30 +23,57 @@ function Regsiter() {
   const handleOnChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
+  // const handleOnSubmit = async (e) => {
+  //   e.preventDefault()
+  //   setIsLoading(true)
+  //   if (formData.email.includes("@") && formData.password.length > 6) {
+  //     const { data } = await registerUser(formData)
+  //     if (data?.token) {
+  //       localStorage.setItem("userToken", data.token)
+  //       toast.success("Succesfully Registered😍")
+  //       setIsLoading(false)
+  //       pageRoute("/chats")
+
+  //     }
+  //     else {
+  //       setIsLoading(false)
+  //       toast.error("Invalid Credentials!")
+  //     }
+  //   }
+  //   else {
+  //     setIsLoading(false)
+  //     toast.warning("Provide valid Credentials!")
+  //     setFormData({ ...formData, password: "" })
+  //   }
+
+  // }
   const handleOnSubmit = async (e) => {
-    e.preventDefault()
-    setIsLoading(true)
+    e.preventDefault();
+    setIsLoading(true);
+  
     if (formData.email.includes("@") && formData.password.length > 6) {
-      const { data } = await registerUser(formData)
-      if (data?.token) {
-        localStorage.setItem("userToken", data.token)
-        toast.success("Succesfully Registered😍")
-        setIsLoading(false)
-        pageRoute("/chats")
-
+      try {
+        const { data } = await registerUser(formData);
+  
+        if (data?.token) {
+          localStorage.setItem("userToken", data.token);
+          toast.success("Successfully Registered 😍");
+          pageRoute("/chats");
+        } else {
+          toast.error("Invalid Credentials!");
+        }
+      } catch (err) {
+        toast.error(err.response?.data?.message || "Registration failed!");
+      } finally {
+        setIsLoading(false);
       }
-      else {
-        setIsLoading(false)
-        toast.error("Invalid Credentials!")
-      }
+    } else {
+      setIsLoading(false);
+      toast.warning("Provide valid credentials!");
+      setFormData({ ...formData, password: "" });
     }
-    else {
-      setIsLoading(false)
-      toast.warning("Provide valid Credentials!")
-      setFormData({ ...formData, password: "" })
-    }
-
-  }
+  };
+  
   useEffect(() => {
     const initClient = () => {
       gapi.client.init({
