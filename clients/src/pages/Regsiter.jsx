@@ -54,6 +54,7 @@ function Regsiter() {
     if (formData.email.includes("@") && formData.password.length > 6) {
       try {
         const { data } = await registerUser(formData);
+        console.log("Register response:", data);
 
         if (data?.token) {
           localStorage.setItem("userToken", data.token);
