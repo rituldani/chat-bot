@@ -26,22 +26,25 @@ function Regsiter() {
   const handleOnSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-
+  
     if (formData.email.includes("@") && formData.password.length > 6) {
       try {
         const { data } = await registerUser(formData);
-        console.log("Register response:", data);
-
-        if (data?.token) {
+        console.log("🔥 Full register response:", data);
+  
+        if (data && data.token) {
           localStorage.setItem("userToken", data.token);
           toast.success("Successfully Registered 😍");
-          pageRoute("/chats");
+          // 🔁 Try normal redirect if useNavigate isn't working
+          window.location.href = "/chats";
         } else {
           toast.error("Invalid Credentials!");
         }
       } catch (err) {
         toast.error(
-          err.response?.data?.error || err.response?.data?.message || "Registration failed!"
+          err.response?.data?.error ||
+          err.response?.data?.message ||
+          "Registration failed!"
         );
       } finally {
         setIsLoading(false);
@@ -52,7 +55,7 @@ function Regsiter() {
       setFormData({ ...formData, password: "" });
     }
   };
-
+   
   useEffect(() => {
     const initClient = () => {
       gapi.client.init({
