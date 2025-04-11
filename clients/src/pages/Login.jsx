@@ -30,7 +30,7 @@ function Login() {
       setIsLoading(true);
       try {
         const { data } = await loginUser(formData); // <-- log here
-        console.log("loginUser response:", res);
+        console.log("loginUser response:", data );
 
         // if (res?.data?.token) {
         //   localStorage.setItem("userToken", res.data.token);
