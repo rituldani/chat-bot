@@ -23,30 +23,6 @@ function Regsiter() {
   const handleOnChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
-  // const handleOnSubmit = async (e) => {
-  //   e.preventDefault()
-  //   setIsLoading(true)
-  //   if (formData.email.includes("@") && formData.password.length > 6) {
-  //     const { data } = await registerUser(formData)
-  //     if (data?.token) {
-  //       localStorage.setItem("userToken", data.token)
-  //       toast.success("Succesfully Registered😍")
-  //       setIsLoading(false)
-  //       pageRoute("/chats")
-
-  //     }
-  //     else {
-  //       setIsLoading(false)
-  //       toast.error("Invalid Credentials!")
-  //     }
-  //   }
-  //   else {
-  //     setIsLoading(false)
-  //     toast.warning("Provide valid Credentials!")
-  //     setFormData({ ...formData, password: "" })
-  //   }
-
-  // }
   const handleOnSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -130,3 +106,29 @@ function Regsiter() {
 }
 
 export default Regsiter
+
+
+  // const handleOnSubmit = async (e) => {
+  //   e.preventDefault()
+  //   setIsLoading(true)
+  //   if (formData.email.includes("@") && formData.password.length > 6) {
+  //     const { data } = await registerUser(formData)
+  //     if (data?.token) {
+  //       localStorage.setItem("userToken", data.token)
+  //       toast.success("Succesfully Registered😍")
+  //       setIsLoading(false)
+  //       pageRoute("/chats")
+
+  //     }
+  //     else {
+  //       setIsLoading(false)
+  //       toast.error("Invalid Credentials!")
+  //     }
+  //   }
+  //   else {
+  //     setIsLoading(false)
+  //     toast.warning("Provide valid Credentials!")
+  //     setFormData({ ...formData, password: "" })
+  //   }
+
+  // }

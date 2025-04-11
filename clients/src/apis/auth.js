@@ -5,6 +5,7 @@ const API = (token) =>
     baseURL: process.env.REACT_APP_SERVER_URL,
     headers: { Authorization: token },
   });
+
 const url = process.env.REACT_APP_SERVER_URL;
 export const loginUser = async (body) => {
   try {
@@ -30,7 +31,6 @@ export const registerUser = async (body) => {
     throw error; // ✨ re-throw the error so it's caught in the form
   }
 };
-
 export const validUser = async () => {
   try {
     const token = localStorage.getItem('userToken');
