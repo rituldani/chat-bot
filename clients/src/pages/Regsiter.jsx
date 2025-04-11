@@ -35,8 +35,7 @@ function Regsiter() {
         if (data && data.token) {
           localStorage.setItem("userToken", data.token);
           toast.success("Successfully Registered 😍");
-          // 🔁 Try normal redirect if useNavigate isn't working
-          window.location.href = "/chats";
+          pageRoute("/chats");
         } else {
           toast.error("Invalid Credentials!");
         }

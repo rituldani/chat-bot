@@ -11,23 +11,18 @@ export const loginUser = async (body) => {
   try {
     return await axios.post(`${url}/auth/login`, body);
   } catch (error) {
+    // console.log('error in loginuser api');
     console.error('error in loginUser API:', error.response || error.message);
     // return null; // Prevent undefined
     throw error;
   }
 };
-export const googleAuth = async (body) => {
-  try {
-    return await axios.post(`${url}/api/google`, body);
-  } catch (error) {
-    console.log(error);
-  }
-};
+
 export const registerUser = async (body) => {
   try {
     return await axios.post(`${url}/auth/register`, body);
   } catch (error) {
-    console.log('Error in register API:', error?.response?.data);
+    console.error('Error in register API:', error?.response?.data);
     throw error; // ✨ re-throw the error so it's caught in the form
   }
 };
@@ -69,5 +64,12 @@ export const checkValid = async () => {
     window.location.href = '/login';
   } else {
     window.location.href = '/chats';
+  }
+};
+export const googleAuth = async (body) => {
+  try {
+    return await axios.post(`${url}/api/google`, body);
+  } catch (error) {
+    console.log(error);
   }
 };

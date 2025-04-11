@@ -18,29 +18,40 @@ function Login() {
   const [isLoading, setIsLoading] = useState(false)
   const [showPass, setShowPass] = useState(false)
   const pageRoute = useNavigate()
-  
+
   const handleOnChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
 
   const formSubmit = async (e) => {
     e.preventDefault();
-  
+
     if (formData.email.includes("@") && formData.password.length > 6) {
       setIsLoading(true);
       try {
         const res = await loginUser(formData); // <-- log here
-        console.log("loginUser response:", res); 
-  
-        if (res?.data?.token) {
-          localStorage.setItem("userToken", res.data.token);
-          toast.success("Successfully Logged In!");
-          setIsLoading(false);
-          pageRoute("/chats");
-        } else {
-          setIsLoading(false);
-          toast.error("Invalid Credentials!");
-          setFormData({ ...formData, password: "" });
+        console.log("loginUser response:", res);
+
+        // if (res?.data?.token) {
+        //   localStorage.setItem("userToken", res.data.token);
+        //   toast.success("Successfully Logged In!");
+        //   setIsLoading(false);
+        //   pageRoute("/chats");
+        // } else {
+        //   setIsLoading(false);
+        //   toast.error("Invalid Credentials!");
+        //   setFormData({ ...formData, password: "" });
+        // }
+        if (data?.token) {
+          localStorage.setItem("userToken", data.token)
+          toast.success("Succesfully Login!")
+          setIsLoading(false)
+          pageRoute("/chats")
+        }
+        else {
+          setIsLoading(false)
+          toast.error("Invalid Credentials!")
+          setFormData({ ...formData, password: "" })
         }
       } catch (error) {
         console.error("Login error:", error);
@@ -48,11 +59,12 @@ function Login() {
         toast.error("Something went wrong while logging in.");
       }
     } else {
+      setIsLoading(false)
       toast.warning("Provide valid credentials!");
       setFormData(defaultData);
     }
   };
-  
+
   useEffect(() => {
     const initClient = () => {
       gapi.client.init({
