@@ -29,7 +29,7 @@ function Login() {
     if (formData.email.includes("@") && formData.password.length > 6) {
       setIsLoading(true);
       try {
-        const res = await loginUser(formData); // <-- log here
+        const { data } = await loginUser(formData); // <-- log here
         console.log("loginUser response:", res);
 
         // if (res?.data?.token) {
