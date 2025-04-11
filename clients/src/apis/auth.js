@@ -1,31 +1,58 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
-const API = (token) =>
-  axios.create({
-    baseURL: process.env.REACT_APP_SERVER_URL,
-    headers: { Authorization: token },
-  });
 
 const url = process.env.REACT_APP_SERVER_URL;
+console.log("SERVER URL:", url);
+
+// const API = (token) =>
+//   axios.create({
+//     baseURL: process.env.REACT_APP_SERVER_URL,
+//     headers: { Authorization: token },
+//   });
+const API = (token) =>
+  axios.create({
+    baseURL: url,
+    headers: {
+      Authorization: token ? `Bearer ${token}` : '',
+    },
+    withCredentials: true, // Needed if you're using cookies for sessions
+  });
+
+// export const loginUser = async (body) => {
+//   try {
+//     return await axios.post(`${url}/auth/login`, body, { withCredentials: true,});
+//   } catch (error) {
+//     // console.log('error in loginuser api');
+//     console.error('error in loginUser API:', error.response || error.message);
+//     toast.error(error?.message || "Something went wrong");
+//     // return null; // Prevent undefined
+//     throw error;
+//   }
+// };
 export const loginUser = async (body) => {
   try {
     return await axios.post(`${url}/auth/login`, body);
   } catch (error) {
-    // console.log('error in loginuser api');
-    console.error('error in loginUser API:', error.response || error.message);
-    // return null; // Prevent undefined
-    throw error;
+    console.log('error in loginuser api');
   }
 };
 
+// export const registerUser = async (body) => {
+//   try {
+//     return await axios.post(`${url}/auth/register`, body);
+//   } catch (error) {
+//     console.error('Error in register API:', error?.response?.data);
+//     throw error; // ✨ re-throw the error so it's caught in the form
+//   }
+// };
 export const registerUser = async (body) => {
   try {
     return await axios.post(`${url}/auth/register`, body);
   } catch (error) {
-    console.error('Error in register API:', error?.response?.data);
-    throw error; // ✨ re-throw the error so it's caught in the form
+    console.log('error in register api');
   }
 };
+
 export const validUser = async () => {
   try {
     const token = localStorage.getItem('userToken');
