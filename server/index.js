@@ -14,12 +14,30 @@ import http from 'http';
 dotenv.config();
 const app = express();
 const PORT=process.env.PORT || 8000
-// const cors = require("cors");
+
 app.use(cors({
-  origin: ["http://localhost:3000", "https://real-time-chat-app-1-hw9s.onrender.com"], 
+  origin: 'https://clients-lz2vzlhdr-ritul-danis-projects.vercel.app', 
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 }));
+
+// const allowedOrigins = [
+//   'http://localhost:3000',
+//   'https://clients-lz2vzlhdr-ritul-danis-projects.vercel.app',
+// ];
+
+// app.use(cors({
+//   origin: function (origin, callback) {
+//     if (!origin || allowedOrigins.includes(origin)) {
+//       callback(null, true);
+//     } else {
+//       callback(new Error('Not allowed by CORS'));
+//     }
+//   },
+//   credentials: true,
+// }));
+
+
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
