@@ -6,7 +6,7 @@ console.log("SERVER URL:", url);
 
 const API = (token) =>
   axios.create({
-    baseURL: 'http://localhost:8000',
+    baseURL: "https://chat-backend-jfgg.onrender.com",
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -14,7 +14,7 @@ const API = (token) =>
   });
 export const loginUser = async (body) => {
   try {
-    const res = await axios.post('http://localhost:8000/auth/login', body);
+    const res = await axios.post('https://chat-backend-jfgg.onrender.com/auth/login', body);
     console.log("Login Response:", res); 
     return res.data;
   } catch (error) {
@@ -34,7 +34,7 @@ export const validUser = async () => {
     console.log("Token being sent to /auth/valid:", token);
     if (!token) return null;
     console.log("Token being sent to /auth/valid:", token);
-    const { data } = await axios.get('http://localhost:8000/auth/valid', {
+    const { data } = await axios.get(`${url}/auth/valid`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
