@@ -5,7 +5,10 @@ import { Link } from 'react-router-dom'
 import { BsEye, BsEyeSlash } from "react-icons/bs";
 import { toast } from 'react-toastify';
 import { GoogleLogin } from "@react-oauth/google";
-import jwtDecode from 'jwt-decode';
+// import jwtDecode from 'jwt-decode';
+// import { decode as jwtDecode } from 'jwt-decode';
+import * as jwtDecode from 'jwt-decode';
+
 
 const defaultData = {
   email: "",
