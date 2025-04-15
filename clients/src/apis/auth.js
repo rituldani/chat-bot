@@ -12,13 +12,19 @@ const API = (token) =>
     },
     withCredentials: true,
   });
-export const loginUser = async (body) => {
+export const loginUser = async (formData) => {
   try {
-    const res = await axios.post('https://chat-backend-jfgg.onrender.com/auth/login', body);
+    const res = await axios.post('https://chat-backend-jfgg.onrender.com/auth/login', formData, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true, // only if you use cookies
+    });
     console.log("Login Response:", res); 
     return res.data;
   } catch (error) {
-    console.log('error in loginuser api');
+    console.error("Login API Error:", error.response?.data || error.message);
+    throw error; // <== rethrow the error so your Login.jsx can catch it
   }
 };
 export const registerUser = async (body) => {

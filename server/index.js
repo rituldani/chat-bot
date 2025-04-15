@@ -2,7 +2,7 @@ import express from 'express';
 import mongoDBConnect from './mongoDB/connection.js';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
-import cors from 'cors';
+// import cors from 'cors';
 import userRoutes from './routes/user.js';
 import chatRoutes from './routes/chat.js';
 import Chat from './models/chatModel.js'
@@ -15,10 +15,12 @@ dotenv.config();
 const app = express();
 const PORT=process.env.PORT || 8000
 
+const cors = require('cors');
+
 app.use(cors({
-  origin: 'https://clients-lz2vzlhdr-ritul-danis-projects.vercel.app', 
+  origin: 'https://clients-6clm8korf-ritul-danis-projects.vercel.app', // Vercel frontend URL
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true
+  credentials: true, // if you're using cookies
 }));
 
 // const allowedOrigins = [

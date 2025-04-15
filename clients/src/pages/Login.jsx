@@ -5,8 +5,6 @@ import { Link } from 'react-router-dom'
 import { BsEye, BsEyeSlash } from "react-icons/bs";
 import { toast } from 'react-toastify';
 import { GoogleLogin } from "@react-oauth/google";
-// import jwtDecode from 'jwt-decode';
-// import { decode as jwtDecode } from 'jwt-decode';
 import * as jwtDecode from 'jwt-decode';
 
 
@@ -58,7 +56,7 @@ function Login() {
       try {
         const res = await loginUser(formData); // formData = email/password etc.
         console.log("Login Result in form:", res);
-        console.log("🧪 res.token:", res.token);
+        console.log("🧪 res.token:", res?.token);
 
         if (res.token) {
           localStorage.setItem("userToken", res.token);
