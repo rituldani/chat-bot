@@ -40,6 +40,9 @@ app.use(
     credentials: true,
   })
 );
+
+app.options('*', cors()); 
+
 // const allowedOrigins = [
 //   'http://localhost:3000',
 //   'https://clients-lz2vzlhdr-ritul-danis-projects.vercel.app',
