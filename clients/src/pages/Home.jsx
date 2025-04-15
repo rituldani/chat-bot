@@ -131,7 +131,8 @@ function Home() {
             <Profile className="min-w-[100%] sm:min-w-[360px] h-[100vh] bg-[#fafafa] dark:bg-zinc-700 shodow-xl relative" />
           }
 
-          <Chat className="chat-page relative lg:w-[100%] h-[100vh] bg-[#fafafa] dark:bg-zinc-600" />
+          {/* <Chat className="chat-page relative lg:w-[100%] h-[100vh] bg-[#fafafa] dark:bg-zinc-600" /> */}
+          <div className="chat-page relative lg:w-[100%] h-[100vh] bg-[#fafafa] dark:bg-zinc-600"><Chat/></div>
         </div>
       </div >
 
