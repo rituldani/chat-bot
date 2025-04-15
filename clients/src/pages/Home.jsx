@@ -31,6 +31,15 @@ function Home() {
     dispatch(fetchChats())
     setSearch("")
   }
+  if (!activeUser) {
+    return (
+      <div className="text-white text-center mt-10">Loading...</div>
+    );
+  }
+  useEffect(() => {
+    console.log("Active user in Home:", activeUser);
+  }, [activeUser]);
+  
   useEffect(() => {
     const searchChange = async () => {
       if (!search.trim()) return; // ⛔ Prevent hitting the API with empty search
@@ -75,7 +84,7 @@ function Home() {
 
   return (
     <>
-      <div className="bg-[#282C35!] scrollbar-hide z-10 h-[100vh]  lg:w-[90%] lg:mx-auto overflow-y-hidden shadow-2xl">
+      <div className="bg-[#282C35] scrollbar-hide z-10 h-[100vh]  lg:w-[90%] lg:mx-auto overflow-y-hidden shadow-2xl">
         <div className='flex'>
           {
             !showProfile 
