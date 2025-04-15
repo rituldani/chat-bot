@@ -25,6 +25,7 @@ const PORT=process.env.PORT || 8000
 app.use(
   cors({
     origin: (origin, callback) => {
+      console.log("Incoming Origin:", origin);
       if (
         !origin || // allow tools like Postman
         /vercel\.app$/.test(origin) || // allow all *.vercel.app
