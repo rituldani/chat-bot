@@ -17,12 +17,28 @@ const PORT=process.env.PORT || 8000
 
 // const cors = require('cors');
 
-app.use(cors({
-  origin: 'https://clients-cwcft7wb2-ritul-danis-projects.vercel.app', // Vercel frontend URL
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true, // if you're using cookies
-}));
-
+// app.use(cors({
+//   origin: 'https://clients-cwcft7wb2-ritul-danis-projects.vercel.app', // Vercel frontend URL
+//   methods: ['GET', 'POST', 'PUT', 'DELETE'],
+//   credentials: true, // if you're using cookies
+// }));
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (
+        !origin || // allow tools like Postman
+        /vercel\.app$/.test(origin) || // allow all *.vercel.app
+        /localhost:\d{4}$/.test(origin) // allow localhost dev
+      ) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
 // const allowedOrigins = [
 //   'http://localhost:3000',
 //   'https://clients-lz2vzlhdr-ritul-danis-projects.vercel.app',
