@@ -31,11 +31,7 @@ function Home() {
     dispatch(fetchChats())
     setSearch("")
   }
-  if (!activeUser) {
-    return (
-      <div className="text-white text-center mt-10">Loading...</div>
-    );
-  }
+  
   useEffect(() => {
   console.log("Active user in Home:", activeUser);
 }, [activeUser]);
@@ -59,27 +55,36 @@ function Home() {
     searchChange();
   }, [search]);
   
+  
   useEffect(() => {
     const token = localStorage.getItem("userToken");
-    if (!token) return;
-  
+    if (!token) {
+      setLoadingUser(false); // No token, nothing to load
+      return;
+    }
+
     const isValid = async () => {
       const data = await validUser();
       if (data?.user) {
-        const user = {
+        dispatch(setActiveUser({
           id: data.user._id,
           email: data.user.email,
           profilePic: data.user.profilePic,
           bio: data.user.bio,
           name: data.user.name
-        };
-        dispatch(setActiveUser(user));
+        }));
       }
+      setLoadingUser(false); // ✅ Done loading
     };
   
     isValid();
   }, [dispatch]);
   
+  if (loadingUser || !activeUser) {
+    return (
+      <div className="text-white text-center mt-10">Loading user...</div>
+    );
+  }
 
 
   return (

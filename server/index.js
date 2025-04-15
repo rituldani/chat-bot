@@ -18,7 +18,7 @@ const PORT=process.env.PORT || 8000
 // const cors = require('cors');
 
 app.use(cors({
-  origin: 'https://clients-6clm8korf-ritul-danis-projects.vercel.app', // Vercel frontend URL
+  origin: 'https://clients-b9ls5rplx-ritul-danis-projects.vercel.app', // Vercel frontend URL
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true, // if you're using cookies
 }));
