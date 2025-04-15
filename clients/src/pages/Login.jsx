@@ -1,13 +1,11 @@
 import React from 'react'
-// import { useEffect } from 'react'
-// import { gapi } from "gapi-script"
 import { useState } from 'react'
 import { loginUser } from '../apis/auth'
-import { Link} from 'react-router-dom'  
-// , useNavigate 
+import { Link } from 'react-router-dom'
 import { BsEye, BsEyeSlash } from "react-icons/bs";
 import { toast } from 'react-toastify';
-// import { validUser } from '../apis/auth'
+import { GoogleLogin } from "@react-oauth/google";
+import jwtDecode from 'jwt-decode';
 
 const defaultData = {
   email: "",
@@ -20,6 +18,31 @@ function Login() {
   const [showPass, setShowPass] = useState(false)
   // const pageRoute = useNavigate()
 
+  const handleGoogleSuccess = async (credentialResponse) => {
+    try {
+      const decoded = jwtDecode(credentialResponse.credential);
+      console.log("Google decoded user:", decoded);
+
+      // Send decoded email or Google ID to your backend to register/login the user
+      const res = await loginUser({
+        email: decoded.email,
+        googleId: decoded.sub, // optional, depending on your backend logic
+      });
+
+      if (res.token) {
+        localStorage.setItem("userToken", res.token);
+        localStorage.setItem("userInfo", JSON.stringify(res.user));
+        toast.success("Logged in with Google!");
+        window.location.href = "/chats";
+      } else {
+        toast.error("Google login failed.");
+      }
+    } catch (error) {
+      console.error("Google login error:", error);
+      toast.error("Google login error.");
+    }
+  };
+
   const handleOnChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
@@ -30,7 +53,7 @@ function Login() {
     if (formData.email.includes("@") && formData.password.length > 6) {
       setIsLoading(true);
       try {
-        const res  = await loginUser(formData); // formData = email/password etc.
+        const res = await loginUser(formData); // formData = email/password etc.
         console.log("Login Result in form:", res);
         console.log("🧪 res.token:", res.token);
 
@@ -45,7 +68,7 @@ function Login() {
           setIsLoading(false)
           toast.error("Invalid Credentials!")
           setFormData({ ...formData, password: "" })
-        }        
+        }
       } catch (error) {
         console.error("Login error:", error);
         setIsLoading(false);
@@ -58,49 +81,6 @@ function Login() {
     }
   };
 
-  // useEffect(() => {
-  //   const initClient = () => {
-  //     gapi.client.init({
-  //       clientId: process.env.REACT_APP_CLIENT_ID,
-  //       scope: ''
-  //     });
-  //   };
-  //   gapi.load('client:auth2', initClient);
-
-  //   const token = localStorage.getItem("userToken");
-  //   if (!token) return;
-
-  //   const isValid = async () => {
-  //     const data = await validUser()
-  //     if (data?.user) {
-  //       window.location.href = "/chats"
-  //     }
-
-  //   }
-  //   isValid()
-  // }, [])
-  // useEffect(() => {
-  //   const check = async () => {
-  //   const token = localStorage.getItem("userToken");
-  //   if (!token) {
-  //     window.location.href = '/login';
-  //     return;
-  //   }
-  
-  //   const data = await validUser();
-  //   if (!data?.user) {
-  //     window.location.href = '/login';
-  //   } else {
-  //     window.location.href = '/chats';
-  //   }
-  // };
-  
-  //   setTimeout(checkLogin, 300);
-  // }, []);
- 
-  
-  
-  
   return (
 
     <>
@@ -131,8 +111,13 @@ function Login() {
               <p style={{ display: isLoading ? "none" : "block" }} className='test-[#fff]'>Login</p>
             </button>
           </form>
-        </div>
-
+          <div className="w-[100%] sm:w-[80%] mt-4">
+          <GoogleLogin
+            onSuccess={handleGoogleSuccess}
+            onError={() => toast.error("Google login failed")}
+          />
+          </div>
+        </div>  
       </div>
     </>
   )
