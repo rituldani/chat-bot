@@ -1,12 +1,12 @@
 import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { gapi } from "gapi-script"
-import { useEffect } from 'react'
+// import { gapi } from "gapi-script"
+// import { useEffect } from 'react'
 import { registerUser } from '../apis/auth'
 import { useState } from 'react'
 import { BsEye, BsEyeSlash } from "react-icons/bs";
 import { toast } from 'react-toastify';
-import { validUser } from '../apis/auth'
+// import { validUser } from '../apis/auth'
 
 const defaultData = {
   firstname: "",
@@ -31,14 +31,14 @@ function Regsiter() {
       try {
         const { data } = await registerUser(formData);
         console.log("🔥 Full register response:", data);
-  
-        if (data && data.token) {
+        
+        if (data && data.message === "success") {
           localStorage.setItem("userToken", data.token);
           toast.success("Successfully Registered 😍");
-          pageRoute("/chats");
+          pageRoute("/login"); 
         } else {
           toast.error("Invalid Credentials!");
-        }
+        }        
       } catch (err) {
         toast.error(
           err.response?.data?.error ||
@@ -55,22 +55,37 @@ function Regsiter() {
     }
   };
    
-  useEffect(() => {
-    const initClient = () => {
-      gapi.client.init({
-        clientId: process.env.REACT_APP_CLIENT_ID,
-        scope: ''
-      });
-    };
-    gapi.load('client:auth2', initClient);
-    const isValid = async () => {
-      const data = await validUser()
-      if (data?.user) {
-        window.location.href = "/chats"
-      }
-    }
-    isValid()
-  }, [])
+  // useEffect(() => {
+  //   const initClient = () => {
+  //     gapi.client.init({
+  //       clientId: process.env.REACT_APP_CLIENT_ID,
+  //       scope: ''
+  //     });
+  //   };
+  //   gapi.load('client:auth2', initClient);
+
+    // const isValid = async () => {
+    //   const data = await validUser()
+    //   if (data?.user) {
+    //     window.location.href = "/chats"
+    //   }
+    // }
+    // isValid()
+  // }, [])
+
+  //  useEffect(() => {
+  //     const checkLogin = async () => {
+  //       const token = localStorage.getItem("userToken");
+  //       if (!token) return;
+    
+  //       const data = await validUser();
+  //       if (data?.user) {
+  //         window.location.href = "/chats";
+  //       }
+  //     };
+    
+  //     setTimeout(checkLogin, 300);
+  //   }, []);
 
   return (
     <div className='bg-[#121418] w-[100vw] h-[100vh] flex justify-center items-center'>
@@ -134,3 +149,10 @@ export default Regsiter
   //   }
 
   // }
+          // if (data && data.token) {
+        //   localStorage.setItem("userToken", data.token);
+        //   toast.success("Successfully Registered 😍");
+        //   pageRoute("/chats");
+        // } else {
+        //   toast.error("Invalid Credentials!");
+        // }

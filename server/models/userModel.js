@@ -41,21 +41,37 @@ userSchema.pre('save', async function (next) {
   }
   next();
 });
+// userSchema.methods.generateAuthToken = async function () {
+//   try {
+//     let token = jwt.sign(
+//       { id: this._id, email: this.email },
+//       process.env.SECRET,
+//       {
+//         expiresIn: '24h',
+//       }
+//     );
+
+//     return token;
+//   } catch (error) {
+//     console.log('error while generating token');
+//   }
+// };
 userSchema.methods.generateAuthToken = async function () {
   try {
-    let token = jwt.sign(
-      { id: this._id, email: this.email },
-      process.env.SECRET,
-      {
-        expiresIn: '24h',
-      }
+    const token = jwt.sign(
+      { _id: this._id },
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" }
     );
-
+    this.tokens = this.tokens || [];
+    this.tokens.push({ token });
+    await this.save();
     return token;
-  } catch (error) {
-    console.log('error while generating token');
+  } catch (err) {
+    console.log("error while generating token", err);
   }
 };
+
 
 const userModel = mongoose.model('User', userSchema);
 export default userModel;

@@ -33,29 +33,44 @@ function Home() {
   }
   useEffect(() => {
     const searchChange = async () => {
-      setIsLoading(true)
-      const { data } = await searchUsers(search)
-      setSearchResults(data)
-      setIsLoading(false)
-    }
-    searchChange()
-  }, [search])
-  useEffect(() => {
-    const isValid = async () => {
-      const data = await validUser()
-
-      const user = {
-        id: data?.user?._id,
-        email: data?.user?.email,
-        profilePic: data?.user?.profilePic,
-        bio: data?.user?.bio,
-        name: data?.user?.name
+      if (!search.trim()) return; // ⛔ Prevent hitting the API with empty search
+  
+      try {
+        const res = await searchUsers(search);
+        const users = res?.data || [];
+        setSearchResults(users);
+      } catch (err) {
+        console.error("Error in searchChange:", err);
+        setSearchResults([]);
+      } finally {
+        setIsLoading(false);
       }
-      dispatch(setActiveUser(user))
-    }
-    isValid()
-
-  }, [dispatch, activeUser])
+    };
+  
+    searchChange();
+  }, [search]);
+  
+  useEffect(() => {
+    const token = localStorage.getItem("userToken");
+    if (!token) return;
+  
+    const isValid = async () => {
+      const data = await validUser();
+      if (data?.user) {
+        const user = {
+          id: data.user._id,
+          email: data.user.email,
+          profilePic: data.user.profilePic,
+          bio: data.user.bio,
+          name: data.user.name
+        };
+        dispatch(setActiveUser(user));
+      }
+    };
+  
+    isValid();
+  }, [dispatch]);
+  
 
 
   return (

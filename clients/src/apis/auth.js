@@ -4,47 +4,23 @@ import { toast } from 'react-toastify';
 const url = process.env.REACT_APP_SERVER_URL;
 console.log("SERVER URL:", url);
 
-// const API = (token) =>
-//   axios.create({
-//     baseURL: process.env.REACT_APP_SERVER_URL,
-//     headers: { Authorization: token },
-//   });
 const API = (token) =>
   axios.create({
-    baseURL: url,
+    baseURL: 'http://localhost:8000',
     headers: {
-      Authorization: token ? `Bearer ${token}` : '',
+      Authorization: `Bearer ${token}`,
     },
-    withCredentials: true, // Needed if you're using cookies for sessions
+    withCredentials: true,
   });
-
-// export const loginUser = async (body) => {
-//   try {
-//     return await axios.post(`${url}/auth/login`, body, { withCredentials: true,});
-//   } catch (error) {
-//     // console.log('error in loginuser api');
-//     console.error('error in loginUser API:', error.response || error.message);
-//     toast.error(error?.message || "Something went wrong");
-//     // return null; // Prevent undefined
-//     throw error;
-//   }
-// };
 export const loginUser = async (body) => {
   try {
-    return await axios.post(`${url}/auth/login`, body);
+    const res = await axios.post('http://localhost:8000/auth/login', body);
+    console.log("Login Response:", res); 
+    return res.data;
   } catch (error) {
     console.log('error in loginuser api');
   }
 };
-
-// export const registerUser = async (body) => {
-//   try {
-//     return await axios.post(`${url}/auth/register`, body);
-//   } catch (error) {
-//     console.error('Error in register API:', error?.response?.data);
-//     throw error; // ✨ re-throw the error so it's caught in the form
-//   }
-// };
 export const registerUser = async (body) => {
   try {
     return await axios.post(`${url}/auth/register`, body);
@@ -52,17 +28,21 @@ export const registerUser = async (body) => {
     console.log('error in register api');
   }
 };
-
 export const validUser = async () => {
   try {
     const token = localStorage.getItem('userToken');
-    const { data } = await API(token).get(`/auth/valid`, {
-      headers: { Authorization: token },
+    console.log("Token being sent to /auth/valid:", token);
+    if (!token) return null;
+    console.log("Token being sent to /auth/valid:", token);
+    const { data } = await axios.get('http://localhost:8000/auth/valid', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
     return data;
   } catch (error) {
     console.error('Error in validUser API:', error.response || error.message);
-    return null; // prevent undefined
+    return null;
   }
 };
 export const searchUsers = async (id) => {
@@ -86,6 +66,10 @@ export const updateUser = async (id, body) => {
   }
 };
 export const checkValid = async () => {
+  const token = localStorage.getItem("userToken");
+  if (!token) return;
+
+
   const data = await validUser();
   if (!data?.user) {
     window.location.href = '/login';

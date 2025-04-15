@@ -4,19 +4,24 @@ import { useNavigate } from "react-router-dom"
 function Start() {
   const pageRoute = useNavigate()
   useEffect(() => {
-    const isValid = async () => {
-      const data = await validUser()
-      if (!data?.user) {
-        pageRoute("/login")
-      }
-      else {
-        pageRoute("/chats")
-
-      }
+    const token = localStorage.getItem("userToken");
+    if (!token) {
+      pageRoute("/login");
+      return;
     }
-    isValid()
-
-  }, [pageRoute])
+  
+    const isValid = async () => {
+      const data = await validUser();
+      if (data?.user) {
+        pageRoute("/chats");
+      } else {
+        pageRoute("/login");
+      }
+    };
+  
+    isValid();
+  }, [pageRoute]);
+  
   return (
 
 

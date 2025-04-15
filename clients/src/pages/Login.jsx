@@ -1,12 +1,13 @@
 import React from 'react'
-import { useEffect } from 'react'
-import { gapi } from "gapi-script"
+// import { useEffect } from 'react'
+// import { gapi } from "gapi-script"
 import { useState } from 'react'
 import { loginUser } from '../apis/auth'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link} from 'react-router-dom'  
+// , useNavigate 
 import { BsEye, BsEyeSlash } from "react-icons/bs";
 import { toast } from 'react-toastify';
-import { validUser } from '../apis/auth'
+// import { validUser } from '../apis/auth'
 
 const defaultData = {
   email: "",
@@ -17,7 +18,7 @@ function Login() {
   const [formData, setFormData] = useState(defaultData)
   const [isLoading, setIsLoading] = useState(false)
   const [showPass, setShowPass] = useState(false)
-  const pageRoute = useNavigate()
+  // const pageRoute = useNavigate()
 
   const handleOnChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
@@ -29,30 +30,22 @@ function Login() {
     if (formData.email.includes("@") && formData.password.length > 6) {
       setIsLoading(true);
       try {
-        const { data } = await loginUser(formData); // <-- log here
-        console.log("loginUser response:", data );
+        const res  = await loginUser(formData); // formData = email/password etc.
+        console.log("Login Result in form:", res);
+        console.log("🧪 res.token:", res.token);
 
-        // if (res?.data?.token) {
-        //   localStorage.setItem("userToken", res.data.token);
-        //   toast.success("Successfully Logged In!");
-        //   setIsLoading(false);
-        //   pageRoute("/chats");
-        // } else {
-        //   setIsLoading(false);
-        //   toast.error("Invalid Credentials!");
-        //   setFormData({ ...formData, password: "" });
-        // }
-        if (data?.token) {
-          localStorage.setItem("userToken", data.token)
-          toast.success("Succesfully Login!")
-          setIsLoading(false)
-          pageRoute("/chats")
-        }
-        else {
+        if (res.token) {
+          localStorage.setItem("userToken", res.token);
+          console.log("Token saved:", localStorage.getItem("userToken"));
+          localStorage.setItem("userInfo", JSON.stringify(res.user));
+          toast.success("Successfully Logged In!");
+          setIsLoading(false);
+          window.location.href = "/chats";
+        } else {
           setIsLoading(false)
           toast.error("Invalid Credentials!")
           setFormData({ ...formData, password: "" })
-        }
+        }        
       } catch (error) {
         console.error("Login error:", error);
         setIsLoading(false);
@@ -65,24 +58,51 @@ function Login() {
     }
   };
 
-  useEffect(() => {
-    const initClient = () => {
-      gapi.client.init({
-        clientId: process.env.REACT_APP_CLIENT_ID,
-        scope: ''
-      });
-    };
-    gapi.load('client:auth2', initClient);
-    const isValid = async () => {
-      const data = await validUser()
-      if (data?.user) {
-        window.location.href = "/chats"
-      }
+  // useEffect(() => {
+  //   const initClient = () => {
+  //     gapi.client.init({
+  //       clientId: process.env.REACT_APP_CLIENT_ID,
+  //       scope: ''
+  //     });
+  //   };
+  //   gapi.load('client:auth2', initClient);
 
-    }
-    isValid()
-  }, [])
+  //   const token = localStorage.getItem("userToken");
+  //   if (!token) return;
+
+  //   const isValid = async () => {
+  //     const data = await validUser()
+  //     if (data?.user) {
+  //       window.location.href = "/chats"
+  //     }
+
+  //   }
+  //   isValid()
+  // }, [])
+  // useEffect(() => {
+  //   const check = async () => {
+  //   const token = localStorage.getItem("userToken");
+  //   if (!token) {
+  //     window.location.href = '/login';
+  //     return;
+  //   }
+  
+  //   const data = await validUser();
+  //   if (!data?.user) {
+  //     window.location.href = '/login';
+  //   } else {
+  //     window.location.href = '/chats';
+  //   }
+  // };
+  
+  //   setTimeout(checkLogin, 300);
+  // }, []);
+ 
+  
+  
+  
   return (
+
     <>
 
       <div className='bg-[#121418] w-[100vw] h-[100vh] flex justify-center items-center'>
