@@ -1,55 +1,6 @@
 import user from '../models/userModel.js';
 import bcrypt from 'bcryptjs';
 import { OAuth2Client } from 'google-auth-library';
-// import jwt from 'jsonwebtoken';
-
-// export const authenticate = async (req, res, next) => {
-//   try {
-//     const authHeader = req.headers.authorization;
-//     const token = authHeader?.split(' ')[1]; // "Bearer <token>"
-
-//     if (!token) {
-//       return res.status(401).json({ error: 'Token missing' });
-//     }
-
-//     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-//     const foundUser = await user.findById(decoded._id); // or decoded.id depending on what you encode
-
-//     if (!foundUser) {
-//       return res.status(401).json({ error: 'Invalid token' });
-//     }
-
-//     req.rootUserId = decoded._id;
-//     req.token = token;
-//     req.rootUser = foundUser; // Optional, for logout logic etc.
-//     next();
-//   } catch (err) {
-//     console.error('Auth Middleware Error:', err);
-//     res.status(401).json({ error: 'Authentication failed' });
-//   }
-// };
-// export const login = async (req, res) => {
-//   const { email, password } = req.body;
-//   try {
-//     const valid = await user.findOne({ email });
-//     if (!valid) res.status(200).json({ message: 'User dont exist' });
-//     const validPassword = await bcrypt.compare(password, valid.password);
-//     if (!validPassword) {
-//       res.status(200).json({ message: 'Invalid Credentials' });
-//     } else {
-//       const token = await valid.generateAuthToken();
-//       await valid.save();
-//       res.cookie('userToken', token, {
-//         httpOnly: true,
-//         maxAge: 24 * 60 * 60 * 1000,
-//       });
-//       res.status(200).json({ token: token, status: 200 });
-//     }
-//   } catch (error) {
-//     res.status(500).json({ error: error });
-//   }
-// };
-
 
 export const register = async (req, res) => {
   const { firstname, lastname, email, password } = req.body;

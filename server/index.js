@@ -8,7 +8,6 @@ import chatRoutes from './routes/chat.js';
 import Chat from './models/chatModel.js'
 import messageRoutes from './routes/message.js';
 import { Server } from "socket.io";
-// import * as Server from 'socket.io';
 import dotenv from 'dotenv';
 import http from 'http';
 dotenv.config();
@@ -42,24 +41,6 @@ app.use(
 );
 
 app.options('*', cors()); 
-
-// const allowedOrigins = [
-//   'http://localhost:3000',
-//   'https://clients-lz2vzlhdr-ritul-danis-projects.vercel.app',
-// ];
-
-// app.use(cors({
-//   origin: function (origin, callback) {
-//     if (!origin || allowedOrigins.includes(origin)) {
-//       callback(null, true);
-//     } else {
-//       callback(new Error('Not allowed by CORS'));
-//     }
-//   },
-//   credentials: true,
-// }));
-
-
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -76,9 +57,6 @@ mongoose.set('strictQuery', false);
 mongoDBConnect();
 
 const server = http.createServer(app);
-// const server = app.listen(PORT, () => {
-//   console.log(`Server Listening at PORT - ${PORT}`);
-// });
 server.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
