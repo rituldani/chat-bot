@@ -91,6 +91,7 @@ function Home() {
   }, [dispatch]);
   
   if (loadingUser || !activeUser) {
+    console.log("Still loading or user not found");
     return (
       <div className="text-white text-center mt-10">Loading user...</div>
     );
