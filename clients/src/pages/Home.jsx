@@ -5,12 +5,12 @@ import { searchUsers, validUser } from '../apis/auth'
 import { setActiveUser } from '../redux/activeUserSlice'
 import { BsSearch } from "react-icons/bs"
 import { IoIosArrowDown } from "react-icons/io"
-import {  setShowProfile } from '../redux/profileSlice'
-import Chat from './Chat' 
+import { setShowProfile } from '../redux/profileSlice'
+import Chat from './Chat'
 import Profile from "../components/Profile"
 import { acessCreate } from "../apis/chat.js"
 import "./home.css"
-import { fetchChats } from '../redux/chatsSlice' 
+import { fetchChats } from '../redux/chatsSlice'
 import Group from '../components/Group'
 import Contacts from '../components/Contacts'
 import Search from '../components/group/Search'
@@ -22,7 +22,11 @@ function Home() {
   const [searchResults, setSearchResults] = useState([])
   const [isLoading, setIsLoading] = useState(false)
   const [search, setSearch] = useState("")
-  const [loadingUser,setLoadingUser] = useState(false)
+  const [loadingUser, setLoadingUser] = useState(false)
+  const chats = useSelector((state) => state.chats);
+  useEffect(() => {
+    console.log("🗂️ All Chats from Redux:", chats);
+  }, [chats]);
 
   const handleSearch = async (e) => {
     setSearch(e.target.value)
@@ -32,15 +36,20 @@ function Home() {
     dispatch(fetchChats())
     setSearch("")
   }
+  useEffect(() => {
+    if (activeUser) {
+      dispatch(fetchChats());
+    }
+  }, [dispatch, activeUser]);
   
   useEffect(() => {
-  console.log("Active user in Home:", activeUser);
-}, [activeUser]);
+    console.log("Active user in Home:", activeUser);
+  }, [activeUser]);
 
   useEffect(() => {
     const searchChange = async () => {
       if (!search.trim()) return; // ⛔ Prevent hitting the API with empty search
-  
+
       try {
         const res = await searchUsers(search);
         const users = res?.data || [];
@@ -52,11 +61,11 @@ function Home() {
         setIsLoading(false);
       }
     };
-  
+
     searchChange();
   }, [search]);
-  
-  
+
+
   useEffect(() => {
     const token = localStorage.getItem("userToken");
     if (!token) {
@@ -68,7 +77,7 @@ function Home() {
       try {
         const data = await validUser();
         console.log("✅ validUser data:", data);
-    
+
         if (data?.user) {
           dispatch(setActiveUser({
             id: data.user._id,
@@ -85,11 +94,11 @@ function Home() {
       } finally {
         setLoadingUser(false);
       }
-    };    
-  
+    };
+
     isValid();
   }, [dispatch]);
-  
+
   if (loadingUser || !activeUser) {
     console.log("Still loading or user not found");
     return (
@@ -103,8 +112,8 @@ function Home() {
       <div className="bg-[#282C35] scrollbar-hide z-10 h-[100vh]  lg:w-[90%] lg:mx-auto overflow-y-hidden shadow-2xl">
         <div className='flex'>
           {
-            !showProfile 
-            ?
+            !showProfile
+              ?
               <div className="md:flex md:flex-col min-w-[360px] h-[100vh] bg-[#ffff] dark:bg-zinc-700 relative">
 
                 <div className='h-[61px] px-4'>
@@ -128,9 +137,9 @@ function Home() {
                       <div className='absolute top-[36px] left-[27px]'>
                         <BsSearch style={{ color: "#c4c4c5" }} />
                       </div>
-                      
+
                     </form>
-                    
+
                     <Group />
 
                     <div style={{ display: search ? "" : "none" }} className='h-[100vh] absolute z-10 w-[100%] left-[0px] top-[70px] bg-[#fff] dark:bg-zinc-700 flex flex-col gap-y-3 pt-3 px-4'>
@@ -142,9 +151,9 @@ function Home() {
 
                 </div>
 
-              </div> 
-            :
-            <Profile className="min-w-[100%] sm:min-w-[360px] h-[100vh] bg-[#fafafa] dark:bg-zinc-700 shodow-xl relative" />
+              </div>
+              :
+              <Profile className="min-w-[100%] sm:min-w-[360px] h-[100vh] bg-[#fafafa] dark:bg-zinc-700 shodow-xl relative" />
           }
 
           <Chat className="chat-page relative lg:w-[100%] h-[100vh] bg-[#fafafa] dark:bg-zinc-600" />
