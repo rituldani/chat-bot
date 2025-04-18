@@ -24,18 +24,19 @@ const PORT=process.env.PORT || 8000
 // }));
 app.use(
   cors({
-    origin: (origin, callback) => {
-      console.log("Incoming Origin:", origin);
-      if (
-        !origin || // allow tools like Postman
-        /vercel\.app$/.test(origin) || // allow all *.vercel.app
-        /localhost:\d{4}$/.test(origin) // allow localhost dev
-      ) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
+    // origin: (origin, callback) => {
+    //   console.log("Incoming Origin:", origin);
+    //   if (
+    //     !origin || // allow tools like Postman
+    //     /vercel\.app$/.test(origin) || // allow all *.vercel.app
+    //     /localhost:\d{4}$/.test(origin) // allow localhost dev
+    //   ) {
+    //     callback(null, true);
+    //   } else {
+    //     callback(new Error("Not allowed by CORS"));
+    //   }
+    // },
+    origin: ['https://clients-coral.vercel.app'], 
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
@@ -44,16 +45,20 @@ app.use(
 app.options('*', cors()); 
 
 app.use(express.json());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
+// app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => {
   res.send("Backend is running ✅");
 });
+app.get("/health", (req, res) => {
+  res.status(200).send("OK");
+});
 app.use('/auth', userRoutes);
 app.use('/api', chatRoutes);
 app.use('/api/message', messageRoutes);
-app.use('/api', userRoutes);
+// app.use('/api', userRoutes);
 
 mongoose.set('strictQuery', false);
 mongoDBConnect();
