@@ -8,6 +8,7 @@ import chatRoutes from './routes/chat.js';
 import Chat from './models/chatModel.js'
 import messageRoutes from './routes/message.js';
 import { Server } from "socket.io";
+// import * as Server from 'socket.io';
 import dotenv from 'dotenv';
 import http from 'http';
 dotenv.config();
@@ -41,6 +42,7 @@ app.use(
 );
 
 app.options('*', cors()); 
+
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));

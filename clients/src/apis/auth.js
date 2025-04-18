@@ -40,12 +40,11 @@ export const validUser = async () => {
     console.log("Token being sent to /auth/valid:", token);
     if (!token) return null;
     console.log("Token being sent to /auth/valid:", token);
-    const { data } = await axios.get(`${url}/auth/valid`, {
+    return await axios.get('https://chat-backend-jfgg.onrender.com/auth/valid', {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
-    return data;
   } catch (error) {
     console.error('Error in validUser API:', error.response || error.message);
     return null;

@@ -22,6 +22,7 @@ function Home() {
   const [searchResults, setSearchResults] = useState([])
   const [isLoading, setIsLoading] = useState(false)
   const [search, setSearch] = useState("")
+  const [loadingUser,setLoadingUser] = useState(false)
 
   const handleSearch = async (e) => {
     setSearch(e.target.value)
@@ -64,18 +65,27 @@ function Home() {
     }
 
     const isValid = async () => {
-      const data = await validUser();
-      if (data?.user) {
-        dispatch(setActiveUser({
-          id: data.user._id,
-          email: data.user.email,
-          profilePic: data.user.profilePic,
-          bio: data.user.bio,
-          name: data.user.name
-        }));
+      try {
+        const data = await validUser();
+        console.log("✅ validUser data:", data);
+    
+        if (data?.user) {
+          dispatch(setActiveUser({
+            id: data.user._id,
+            email: data.user.email,
+            profilePic: data.user.profilePic,
+            bio: data.user.bio,
+            name: data.user.name
+          }));
+        } else {
+          console.warn("⚠️ No user returned from /auth/valid");
+        }
+      } catch (err) {
+        console.error("💥 validUser failed:", err);
+      } finally {
+        setLoadingUser(false);
       }
-      setLoadingUser(false); // ✅ Done loading
-    };
+    };    
   
     isValid();
   }, [dispatch]);
